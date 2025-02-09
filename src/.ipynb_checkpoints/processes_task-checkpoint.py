@@ -1,5 +1,6 @@
 # src/processes_task.py
 import multiprocessing
+import time  # Make sure to import time module
 from src.functions import generate_random_chars, generate_random_sum
 
 # Function to wrap each task in a process
@@ -13,7 +14,7 @@ def run_processes():
     process2 = multiprocessing.Process(target=process_function, args=(generate_random_sum,))
     
     # Run the processes
-    start_time = time.time()
+    start_time = time.time()  # Measure start time
     process1.start()
     process2.start()
 
@@ -21,5 +22,5 @@ def run_processes():
     process1.join()
     process2.join()
     
-    end_time = time.time()
+    end_time = time.time()  # Measure end time
     print(f"Time to execute using processes: {end_time - start_time} seconds.")
