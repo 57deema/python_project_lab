@@ -1,4 +1,5 @@
 # src/sequential_task.py
+import time  # Make sure to import time module
 from src.functions import generate_random_chars, generate_random_sum
 
 # Function to run the sequential task
