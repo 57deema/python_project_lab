@@ -1,5 +1,6 @@
 # src/threads_task.py
 import threading
+import time  # Make sure to import time module
 from src.functions import generate_random_chars, generate_random_sum
 
 # Function to wrap each task in a thread
@@ -13,7 +14,7 @@ def run_threads():
     thread2 = threading.Thread(target=thread_function, args=(generate_random_sum,))
     
     # Run the threads
-    start_time = time.time()
+    start_time = time.time()  # Measure start time
     thread1.start()
     thread2.start()
 
@@ -21,5 +22,5 @@ def run_threads():
     thread1.join()
     thread2.join()
     
-    end_time = time.time()
+    end_time = time.time()  # Measure end time
     print(f"Time to execute using threads: {end_time - start_time} seconds.")
