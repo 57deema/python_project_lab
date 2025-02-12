@@ -1,26 +1,19 @@
-# src/threads_task.py
-import threading
-import time  # Make sure to import time module
-from src.functions import generate_random_chars, generate_random_sum
+import time
+from concurrent.futures import ThreadPoolExecutor
+from src.functions import calculate_partial_sum
 
-# Function to wrap each task in a thread
-def thread_function(func, *args):
-    return func(*args)
+def run_threads(n, num_threads=4):
+    """Run parallel sum calculation using threads."""
+    chunk_size = n // num_threads
+    start_time = time.perf_counter()
 
-# Function to run the threading task
-def run_threads():
-    # Start threads for both tasks
-    thread1 = threading.Thread(target=thread_function, args=(generate_random_chars,))
-    thread2 = threading.Thread(target=thread_function, args=(generate_random_sum,))
-    
-    # Run the threads
-    start_time = time.time()  # Measure start time
-    thread1.start()
-    thread2.start()
+    with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        results = list(executor.map(calculate_partial_sum, 
+                                    [i * chunk_size + 1 for i in range(num_threads)], 
+                                    [(i + 1) * chunk_size if i != num_threads - 1 else n for i in range(num_threads)]))
 
-    # Wait for both threads to finish
-    thread1.join()
-    thread2.join()
-    
-    end_time = time.time()  # Measure end time
-    print(f"Time to execute using threads: {end_time - start_time} seconds.")
+    total_sum = sum(results)
+    end_time = time.perf_counter()
+
+    print(f"Threaded Sum: {total_sum}")
+    print(f"Execution Time (Threads): {end_time - start_time:.6f} seconds")

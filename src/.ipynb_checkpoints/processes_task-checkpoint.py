@@ -1,26 +1,19 @@
-# src/processes_task.py
-import multiprocessing
-import time  # Make sure to import time module
-from src.functions import generate_random_chars, generate_random_sum
+import time
+from concurrent.futures import ProcessPoolExecutor
+from src.functions import calculate_partial_sum
 
-# Function to wrap each task in a process
-def process_function(func, *args):
-    return func(*args)
+def run_processes(n, num_processes=4):
+    """Run parallel sum calculation using multiprocessing."""
+    chunk_size = n // num_processes
+    start_time = time.perf_counter()
 
-# Function to run the processes task
-def run_processes():
-    # Start processes for both tasks
-    process1 = multiprocessing.Process(target=process_function, args=(generate_random_chars,))
-    process2 = multiprocessing.Process(target=process_function, args=(generate_random_sum,))
-    
-    # Run the processes
-    start_time = time.time()  # Measure start time
-    process1.start()
-    process2.start()
+    with ProcessPoolExecutor(max_workers=num_processes) as executor:
+        results = list(executor.map(calculate_partial_sum, 
+                                    [i * chunk_size + 1 for i in range(num_processes)], 
+                                    [(i + 1) * chunk_size if i != num_processes - 1 else n for i in range(num_processes)]))
 
-    # Wait for both processes to finish
-    process1.join()
-    process2.join()
-    
-    end_time = time.time()  # Measure end time
-    print(f"Time to execute using processes: {end_time - start_time} seconds.")
+    total_sum = sum(results)
+    end_time = time.perf_counter()
+
+    print(f"Multiprocessing Sum: {total_sum}")
+    print(f"Execution Time (Multiprocessing): {end_time - start_time:.6f} seconds")
