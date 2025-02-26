@@ -1,8 +1,8 @@
 import time
 import os
-from sync_utils import lock
-from sensor import latest_temperatures
-from processing import temperature_averages
+from src.sync_utils import lock
+from src.sensor import latest_temperatures
+from src.processing import temperature_averages
 
 def initialize_display():
     """Initial display layout."""
