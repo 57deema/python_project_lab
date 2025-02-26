@@ -1,64 +1,32 @@
+import threading
+from queue import Queue
+from src.sensor import simulate_sensor
+from src.processing import process_temperatures
+from src.display import initialize_display, update_display
+from src.sync_utils import lock, condition
 from src.sequential_task import run_sequential
-from src.threads_task import run_threads
-from src.processes_task import run_processes
-import time
 
-def performance_analysis(n):
-    num_threads = 4  
-    num_processes = 4  
-    P = 0.9  
+if __name__ == "__main__":
+    run_sequential()
 
-    print("\nRunning Sequential Execution...")
-    start = time.perf_counter()
-    run_sequential(n)
-    T_sequential = time.perf_counter() - start
+num_sensors = 3
+queue = Queue()
 
-    print("\nRunning Threading Execution...")
-    start = time.perf_counter()
-    run_threads(n, num_threads)
-    T_threads = time.perf_counter() - start
+# Start sensor threads
+sensor_threads = []
+for i in range(num_sensors):
+    thread = threading.Thread(target=simulate_sensor, args=(i, lock), daemon=True)
+    sensor_threads.append(thread)
+    thread.start()
 
-    print("\nRunning Multiprocessing Execution...")
-    start = time.perf_counter()
-    run_processes(n, num_processes)
-    T_processes = time.perf_counter() - start
+# Start processing thread
+processing_thread = threading.Thread(target=process_temperatures, args=(queue, lock, condition), daemon=True)
+processing_thread.start()
 
-    # Compute Speedups
-    S_threads = T_sequential / T_threads
-    S_processes = T_sequential / T_processes
+# Start display update thread
+display_thread = threading.Thread(target=update_display, args=(lock, condition), daemon=True)
+display_thread.start()
 
-    # Compute Efficiencies
-    E_threads = S_threads / num_threads
-    E_processes = S_processes / num_processes
-
-    # Compute Amdahl’s Speedup
-    S_A_threads = 1 / ((1 - P) + (P / num_threads))
-    S_A_processes = 1 / ((1 - P) + (P / num_processes))
-
-    # Compute Gustafson’s Speedup
-    S_G_threads = (1 - P) + (P * num_threads)
-    S_G_processes = (1 - P) + (P * num_processes)
-
-    print("\n=== Performance Analysis Results ===")
-    print(f"Sequential Time: {T_sequential:.6f} sec")
-    print(f"Threading Time: {T_threads:.6f} sec, Speedup: {S_threads:.2f}, Efficiency: {E_threads:.2f}")
-    print(f"Multiprocessing Time: {T_processes:.6f} sec, Speedup: {S_processes:.2f}, Efficiency: {E_processes:.2f}")
-    print(f"Amdahl’s Law Speedup (Threads): {S_A_threads:.2f}")
-    print(f"Amdahl’s Law Speedup (Processes): {S_A_processes:.2f}")
-    print(f"Gustafson’s Law Speedup (Threads): {S_G_threads:.2f}")
-    print(f"Gustafson’s Law Speedup (Processes): {S_G_processes:.2f}")
-
-# Run tasks
-N = 10**7  # 10 million for faster benchmarking
-
-print("task 3_a: sequential")
-run_sequential(N)
-
-print("\ntask 3_b: Parallelize with Threading")
-run_threads(N, 4)
-
-print("\ntask 3_c: Parallelize with Multiprocessing")
-run_processes(N, 4)
-
-print("\ntask 3_d: Performance analysis")
-performance_analysis(N)
+# Keep the main program running
+while True:
+    pass  # Infinite loop to keep threads alive
