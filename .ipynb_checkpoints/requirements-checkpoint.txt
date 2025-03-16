@@ -1,5 +1,1 @@
-scikit-learn
-scikit-image
 numpy
-tqdm
-joblib
