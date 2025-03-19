@@ -97,7 +97,7 @@
 ## 📂 Submission
 Only this **GitHub repository branch link** needs to be submitted:
 ```
-https://github.com/yourusername/python_project_lab/tree/assignment1-dsai3202
+https://github.com/57deema/python_project_lab/tree/assignment1-dsai3202
 ```
 
 ---
