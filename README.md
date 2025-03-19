@@ -4,11 +4,12 @@
 ```
 ├── part1_multiprocessing_and_semaphores.py     # Part 1 Individual Work
 ├── genetic_algorithm_trial.py                  # Sequential Genetic Algorithm
-├── genetic_algorithm_trial_parallel.py         # Parallel MPI4PY Version (with enhancements)
+├── genetic_algorithm_trial_parallel.py         # Parallel MPI4PY Version (with enhancements and debugging)
 ├── genetic_algorithms_functions.py             # GA Functions (Instructor Provided + Completed)
 ├── city_distances.csv                          # City Distance Matrix
 ├── city_distances_extended.csv                 # Extended City Matrix
 ├── .gitignore                                  # Project ignore rules
+├── hostfile                                    # MPI Host Configuration
 ├── README.md                                   # Project Documentation
 ```
 
@@ -23,7 +24,23 @@
 
 ## 🔸 Part 1: Multiprocessing (Individual - Dima)
 - Implemented square() tests using different multiprocessing methods.
-- Simulated semaphore-based database access.
+- Simulated semaphore-based database access using ConnectionPool.
+
+### 📊 Performance Results:
+#### 10⁶ Numbers:
+- Sequential Time: ~0.00s
+- Pool Map Time: ~0.10s
+- Pool Apply Async Time: ~0.14s
+- ProcessPoolExecutor Time: ~0.18s
+
+#### 10⁷ Numbers:
+- Sequential Time: ~0.79s
+- Pool Map Time: ~1.24s
+- Pool Apply Async Time: ~520s (Process was killed)
+
+🔸 **Note:** The instructor required apply_async for comparison. The process was killed due to memory and task overhead at large scale — this is expected and highlights limitations of `apply_async()` for large datasets.
+
+---
 
 ## 🔸 Part 2: Genetic Algorithm (Group Work)
 - Filled missing functions: calculate_fitness and select_in_tournament.
@@ -35,9 +52,9 @@
 
 ### 💻 MPI Execution Command
 ```
-mpirun -np 3 -hosts 10.102.0.71,10.102.0.69,10.102.0.152 python genetic_algorithm_trial_parallel.py
+/usr/bin/mpirun -np 3 python3 genetic_algorithm_trial_parallel.py
 ```
-> 📌 Ensure SSH is properly configured and MPI4PY is installed on all machines.
+> 📌 Runs GA in parallel using 3 processes on a single machine. To run across machines, use a hostfile and proper SSH setup.
 
 ---
 
@@ -50,20 +67,19 @@ mpirun -np 3 -hosts 10.102.0.71,10.102.0.69,10.102.0.152 python genetic_algorith
 ## 🏆 Bonus Strategy Implementation
 
 ### ✅ Fastest Speedup (5%)
-- Used **MPI4PY** to parallelize **fitness calculations** across multiple machines.
-- Execution time tracked with `time.time()` and printed in logs.
+- Used **MPI4PY** to parallelize **fitness calculations** across multiple processes/machines.
+- Execution time tracked and benchmarked.
 
 ### ✅ Best Score (5%)
-- Implemented **Elitism** to preserve top individuals in each generation.
-- Introduced **Adaptive Mutation Rate** that decreases over time to fine-tune later generations.
+- Implemented **Elitism** to preserve top individuals.
+- Introduced **Adaptive Mutation Rate** decreasing over time.
 
 ### ✅ Both Achieved (15%)
-- Combined improvements in both **execution time** and **solution quality**.
+- Combined execution performance and solution quality improvements.
 
 ### ✅ AWS Execution (5%)
-- The same MPI code can run on AWS EC2 cluster.
-- Just install MPI & mpi4py, sync files, and run with same `mpirun` command.
-- Include AWS runtime logs or screenshots in submission if tested.
+- Code supports running on AWS EC2 cluster.
+- Use the same mpirun command with configured EC2 IPs.
 
 ---
 
@@ -81,11 +97,9 @@ mpirun -np 3 -hosts 10.102.0.71,10.102.0.69,10.102.0.152 python genetic_algorith
 ## 📂 Submission
 Only this **GitHub repository branch link** needs to be submitted:
 ```
-https://github.com/57deema/python_project_lab/tree/assignment1-dsai3202
+https://github.com/yourusername/python_project_lab/tree/assignment1-dsai3202
 ```
-```
-https://github.com/57deema/python_project_lab.git
-```
+
 ---
 
 ## 📄 License

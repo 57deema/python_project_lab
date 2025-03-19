@@ -1,5 +1,5 @@
 # genetic_algorithm_trial_parallel.py
-# MPI4PY Version of Genetic Algorithm with Enhancements
+# MPI4PY Version of Genetic Algorithm with Enhancements and Debugging
 # Group: Dima, Areej, Amelda
 
 from mpi4py import MPI
@@ -17,6 +17,11 @@ size = comm.Get_size()
 # Load distance matrix
 distance_matrix = pd.read_csv('city_distances.csv').to_numpy()
 num_nodes = distance_matrix.shape[0]
+
+# DEBUG: Print a sample of distance matrix to verify it's loaded correctly
+if rank == 0:
+    print("\n[DEBUG] Distance Matrix Sample (top-left 5x5):")
+    print(distance_matrix[:5, :5])
 
 # Parameters
 population_size = 10000
@@ -123,3 +128,7 @@ if rank == 0:
     print("\nBest Solution Route:", population[best_idx])
     print("Total Distance:", -final_scores[best_idx])
     print("Total Execution Time (Parallel):", round(total_time, 2), "seconds")
+
+    # Additional Debug Print (Safe - non-invasive)
+    print("\n[DEBUG] Final Best Route:", population[best_idx])
+    print("[DEBUG] Final Best Distance (should be negative):", calculate_fitness(population[best_idx], distance_matrix))

@@ -16,7 +16,7 @@ def square(n):
     return n * n
 
 # 2. Create list of numbers
-NUMBERS_SMALL = list(range(10**6))
+NUMBERS_SMALL = list(range(1000))  # or even 10000
 NUMBERS_LARGE = list(range(10**7))
 
 # Helper to measure time
@@ -60,7 +60,7 @@ def executor_square(numbers):
 if __name__ == "__main__":
     print("---- Testing on 10^6 numbers ----")
     measure_time(sequential_square, NUMBERS_SMALL, "Sequential")
-    measure_time(multiprocessing_individual, NUMBERS_SMALL, "Multiprocessing - Individual Processes")
+    ''' measure_time(multiprocessing_individual, NUMBERS_SMALL, "Multiprocessing - Individual Processes") '''
     measure_time(pool_map_square, NUMBERS_SMALL, "Pool Map")
     measure_time(pool_apply_async_square, NUMBERS_SMALL, "Pool Apply Async")
     measure_time(executor_square, NUMBERS_SMALL, "ProcessPoolExecutor")
