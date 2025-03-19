@@ -16,7 +16,7 @@ def square(n):
     return n * n
 
 # 2. Create list of numbers
-NUMBERS_SMALL = list(range(1000))  # or even 10000
+NUMBERS_SMALL = list(range(1000))  # Reduced size for testing
 NUMBERS_LARGE = list(range(10**7))
 
 # Helper to measure time
@@ -58,9 +58,9 @@ def executor_square(numbers):
 
 # Run all methods on SMALL and LARGE lists
 if __name__ == "__main__":
-    print("---- Testing on 10^6 numbers ----")
+    print("---- Testing on 10^3 numbers (reduced SMALL set) ----")
     measure_time(sequential_square, NUMBERS_SMALL, "Sequential")
-    ''' measure_time(multiprocessing_individual, NUMBERS_SMALL, "Multiprocessing - Individual Processes") '''
+    measure_time(multiprocessing_individual, NUMBERS_SMALL, "Multiprocessing - Individual Processes")
     measure_time(pool_map_square, NUMBERS_SMALL, "Pool Map")
     measure_time(pool_apply_async_square, NUMBERS_SMALL, "Pool Apply Async")
     measure_time(executor_square, NUMBERS_SMALL, "ProcessPoolExecutor")
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     print("\n---- Testing on 10^7 numbers ----")
     measure_time(sequential_square, NUMBERS_LARGE, "Sequential")
     measure_time(pool_map_square, NUMBERS_LARGE, "Pool Map")
-    measure_time(pool_apply_async_square, NUMBERS_LARGE, "Pool Apply Async")
+    measure_time(pool_apply_async_square, NUMBERS_LARGE[:10000], "Pool Apply Async (safe test)")
     measure_time(executor_square, NUMBERS_LARGE, "ProcessPoolExecutor")
 
 #######################################
@@ -102,9 +102,8 @@ def simulate_database_access():
         p.start()
     for p in processes:
         p.join()
-
     print("All database operations completed.")
 
 # Run DB simulation
-    print("\n---- Testing Semaphore-based Connection Pool ----")
-    simulate_database_access()
+print("\n---- Testing Semaphore-based Connection Pool ----")
+simulate_database_access()
