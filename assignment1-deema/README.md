@@ -3,14 +3,17 @@
 ## Repository Contents
 ```
 ├── part1_multiprocessing_and_semaphores.py     # Part 1 Individual Work
-├── genetic_algorithm_trial.py                  # Sequential Genetic Algorithm
-├── genetic_algorithm_trial_parallel.py         # Parallel MPI4PY Version (with enhancements and debugging)
-├── genetic_algorithms_functions.py             # GA Functions (Instructor Provided + Completed)
-├── city_distances.csv                          # City Distance Matrix
-├── city_distances_extended.csv                 # Extended City Matrix
-├── .gitignore                                  # Project ignore rules
-├── hostfile                                    # MPI Host Configuration
-├── README.md                                   # Project Documentation
+├── assignment1-deema/
+│   ├── genetic_algorithm_trial.py                  # Sequential Genetic Algorithm (Instructor File)
+│   ├── genetic_algorithm_trial_parallel.py         # Parallel MPI4PY Version (Group Work)
+│   ├── genetic_algorithms_functions.py             # GA Functions (Instructor Provided + Completed)
+│   ├── city_distances.csv                          # City Distance Matrix
+│   ├── city_distances_extended.csv                 # Extended City Matrix
+│   ├── hostfile                                    # MPI Host Configuration
+│   ├── machines.txt                                # Alternate hostfile copy
+│   └── README.md                                   # Part 2 Documentation
+├── .gitignore                                      # Project ignore rules
+├── README.md (this file)                           # Overall Project Documentation
 ```
 
 ---
@@ -43,6 +46,8 @@
 ---
 
 ## 🔸 Part 2: Genetic Algorithm (Group Work)
+_All Part 2 files and documentation are organized inside the `assignment1-deema/` subfolder for clarity._
+
 - Filled missing functions: calculate_fitness and select_in_tournament.
 - Explained GA execution flow.
 - Proposed MPI4PY parallel design.
@@ -52,7 +57,8 @@
 
 ### 💻 MPI Execution Command
 ```
-/usr/bin/mpirun -np 3 python3 genetic_algorithm_trial_parallel.py
+cd assignment1-deema
+/usr/bin/mpirun -np 3 -hostfile hostfile python3 genetic_algorithm_trial_parallel.py
 ```
 > 📌 Runs GA in parallel using 3 processes on a single machine. To run across machines, use a hostfile and proper SSH setup.
 
